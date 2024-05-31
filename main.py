@@ -20,12 +20,38 @@ def draw_board():
         pygame.draw.line(screen, "white", (0, 100 * x), (screen_width, 100 * x), 6)
         pygame.draw.line(screen, "white", (100 * x, 0), (100 * x, screen_height), 6)
 
+def draw_markers():
+    x_pos = 0
+    for x in markers:
+        y_pos = 0
+        for y in x:
+            if y == 1:
+                pygame.draw.line(screen, "red", (x_pos * 100 + 15, y_pos * 100 + 15),(x_pos * 100 + 85, y_pos * 100 + 85))
+                pygame.draw.line(screen, "red", (x_pos * 100 + 85, y_pos * 100 + 15),(x_pos * 100 + 15, y_pos * 100 + 85))
+            if y == -1:
+                pygame.draw.circle(screen, "green", (x_pos * 100 + 50, y_pos * 100 + 50), 38, 6)
+            y_pos += 1
+        x_pos += 1
+
 run = True
 while run:
     draw_board()
+    draw_markers()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
+        if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
+            clicked = True
+        if event.type == pygame.MOUSEBUTTONUP and clicked == True:
+            clicked = False
+            pos = pygame.mouse.get_pos()
+            cell_x = pos[0]//100
+            cell_y = pos[0]//100
+            if markers[cell_x][cell_y] == 0:
+                markers[cell_x][cell_y] == player
+                player *= -1
+
+                
     pygame.display.update()
 pygame.quit()
