@@ -32,6 +32,14 @@ def draw_markers():
                 pygame.draw.circle(screen, "green", (x_pos * 100 + 50, y_pos * 100 + 50), 38, 6)
             y_pos += 1
         x_pos += 1
+def check_gameover():
+    global game_over
+    global winner
+    x_pos = 0
+    
+    for x in markers:
+        x_pos += 1
+
 
 run = True
 while run:
@@ -41,17 +49,29 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
+        if game_over == False:
+            if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
+                clicked = True
+            if event.type == pygame.MOUSEBUTTONUP and clicked == True:
+                clicked = False
+                pos = pygame.mouse.get_pos()
+                cell_x = pos[0]//100
+                cell_y = pos[0]//100
+                if markers[cell_x][cell_y] == 0:
+                    markers[cell_x][cell_y] == player
+                    player *= -1
+                    check_gameover()
+
+    if game_over == True:
         if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
             clicked = True
         if event.type == pygame.MOUSEBUTTONUP and clicked == True:
             clicked = False
             pos = pygame.mouse.get_pos()
-            cell_x = pos[0]//100
-            cell_y = pos[0]//100
-            if markers[cell_x][cell_y] == 0:
-                markers[cell_x][cell_y] == player
-                player *= -1
+            for x in range(3):
+                row = [0] * 3
+                markers.append(row)
 
-                
+
     pygame.display.update()
 pygame.quit()
